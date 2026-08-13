@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Expense Tracker | Monthly Reports</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00875a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SpendWise">
+  <link rel="apple-touch-icon" href="logo-light.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body data-page="monthly-reports">
+
+  <header class="topbar">
+    <a href="index.html" class="brand" title="SpendWise Dashboard">
+      <img src="logo-light.png" alt="SpendWise" class="brand-logo-img logo-light-img">
+      <img src="logo-dark.png" alt="SpendWise" class="brand-logo-img logo-dark-img">
+      <span class="brand-name"><span class="brand-spend">Spend</span><span class="brand-wise">Wise</span></span>
+    </a>
+
+    <div class="topbar-right">
+      <button id="themeToggle" class="theme-toggle-btn" type="button">🌙 Dark Mode</button>
+      <div id="topbarAuthArea"></div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="index.html" class="sidebar-link">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="history.html" class="sidebar-link">
+          <span class="icon">📜</span>
+          <span>History</span>
+        </a>
+        <a href="analytics.html" class="sidebar-link">
+          <span class="icon">📈</span>
+          <span>View Insights</span>
+        </a>
+        <a href="profile.html" class="sidebar-link">
+          <span class="icon">👤</span>
+          <span>Profile</span>
+        </a>
+        <a href="monthly-reports.html" class="sidebar-link active">
+          <span class="icon">📁</span>
+          <span>Monthly Reports</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content container">
+
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">SAVED STATEMENTS</p>
+          <h1>Monthly Reports Archive</h1>
+          <p>View, download, and share PDF statements generated on the last day of each month.</p>
+        </div>
+        <button type="button" class="secondary-button" onclick="openPdfModal()">💬 Share</button>
+      </section>
+
+      <section class="panel">
+        <div id="monthlyReportsGrid" class="summary-grid"
+          style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <div id="monthlyReportsEmpty" class="empty-state hidden">
+          <div style="font-size: 40px; margin-bottom: 12px;">📁</div>
+          <h3>No monthly reports generated yet</h3>
+          <p>Monthly PDF statements are automatically archived on the last day of every month at 9:00 PM, or you can
+            generate one anytime using the Share button.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

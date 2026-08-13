@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Expense Tracker | Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00875a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SpendWise">
+  <link rel="apple-touch-icon" href="logo-light.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body data-page="analytics">
+
+  <header class="topbar">
+    <a href="index.html" class="brand" title="SpendWise Dashboard">
+      <img src="logo-light.png" alt="SpendWise" class="brand-logo-img logo-light-img">
+      <img src="logo-dark.png" alt="SpendWise" class="brand-logo-img logo-dark-img">
+      <span class="brand-name"><span class="brand-spend">Spend</span><span class="brand-wise">Wise</span></span>
+    </a>
+
+    <div class="topbar-right">
+      <button id="themeToggle" class="theme-toggle-btn" type="button">🌙 Dark Mode</button>
+      <div id="topbarAuthArea"></div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="index.html" class="sidebar-link">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="history.html" class="sidebar-link">
+          <span class="icon">📜</span>
+          <span>History</span>
+        </a>
+        <a href="analytics.html" class="sidebar-link active">
+          <span class="icon">📈</span>
+          <span>View Insights</span>
+        </a>
+        <a href="profile.html" class="sidebar-link">
+          <span class="icon">👤</span>
+          <span>Profile</span>
+        </a>
+        <a href="monthly-reports.html" class="sidebar-link">
+          <span class="icon">📁</span>
+          <span>Monthly Reports</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content container">
+
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">FINANCIAL INSIGHTS</p>
+          <h1>Analytics</h1>
+          <p>Understand where your money comes from and where it goes.</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button type="button" class="secondary-button" onclick="openPdfModal()">💬 Share</button>
+          <a href="index.html" class="secondary-button">← Dashboard</a>
+        </div>
+      </section>
+
+      <div class="analytics-layout">
+        <div class="analytics-left-col">
+          <section class="summary-grid">
+            <div class="summary-card balance-card">
+              <div class="card-icon">₹</div>
+              <div>
+                <p>Current balance</p>
+                <h2 id="analyticsBalance">₹0.00</h2>
+              </div>
+            </div>
+
+            <div class="summary-card income-card">
+              <div class="card-icon">↗</div>
+              <div>
+                <p>Total income</p>
+                <h2 id="analyticsIncome">₹0.00</h2>
+              </div>
+            </div>
+
+            <div class="summary-card expense-card">
+              <div class="card-icon">↘</div>
+              <div>
+                <p>Total expenses</p>
+                <h2 id="analyticsExpenses">₹0.00</h2>
+              </div>
+            </div>
+          </section>
+
+          <section class="charts-grid">
+            <div class="panel chart-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">SPENDING BREAKDOWN</p>
+                  <h2>Expenses by category</h2>
+                </div>
+              </div>
+              <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+              </div>
+              <p class="chart-note" id="topCategoryText">Add expenses to see your top category.</p>
+            </div>
+
+            <div class="panel chart-panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Income vs expenses</h2>
+                </div>
+              </div>
+              <div class="chart-container">
+                <canvas id="cashflowChart"></canvas>
+              </div>
+              <p class="chart-note" id="cashflowText">Add transactions to see your cash flow.</p>
+            </div>
+          </section>
+        </div>
+
+        <div class="analytics-right-col">
+          <section class="panel insight-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">SMART OBSERVATIONS</p>
+                <h2>What your data says</h2>
+              </div>
+            </div>
+
+            <div class="insights-grid vertical-stack" id="insightsGrid"></div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- AUTH MODAL CONTAINER -->
+  <div id="authModalContainer"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

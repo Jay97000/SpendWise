@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Expense Tracker | Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00875a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SpendWise">
+    <link rel="apple-touch-icon" href="logo-light.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body data-page="dashboard">
+
+    <header class="topbar">
+        <a href="index.html" class="brand" title="SpendWise Dashboard">
+            <img src="logo-light.png" alt="SpendWise" class="brand-logo-img logo-light-img">
+            <img src="logo-dark.png" alt="SpendWise" class="brand-logo-img logo-dark-img">
+            <span class="brand-name"><span class="brand-spend">Spend</span><span class="brand-wise">Wise</span></span>
+        </a>
+        <div class="topbar-right">
+            <button id="themeToggle" class="theme-toggle-btn" type="button">🌙 Dark Mode</button>
+            <div id="topbarAuthArea"></div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link active">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="history.html" class="sidebar-link">
+                    <span class="icon">📜</span>
+                    <span>History</span>
+                </a>
+                <a href="analytics.html" class="sidebar-link">
+                    <span class="icon">📈</span>
+                    <span>View Insights</span>
+                </a>
+                <a href="profile.html" class="sidebar-link">
+                    <span class="icon">👤</span>
+                    <span>Profile</span>
+                </a>
+                <a href="monthly-reports.html" class="sidebar-link">
+                    <span class="icon">📁</span>
+                    <span>Monthly Reports</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content container">
+            <section class="hero">
+                <div>
+                    <p class="eyebrow">PERSONAL FINANCE DASHBOARD</p>
+                    <h1 id="welcomeHeading">Welcome back!</h1>
+                    <p>Track income, expenses and budgets quickly.</p>
+                </div>
+                <div class="hero-actions">
+                    <div class="date-box" id="todayDate"></div>
+                    <button type="button" class="secondary-button" onclick="openPdfModal()"
+                        style="display:inline-flex;align-items:center;gap:6px;padding:12px 18px;">💬 Share</button>
+                </div>
+            </section>
+
+            <!-- Top summary row (three cards) -->
+            <section class="summary-grid top-summary">
+                <div class="summary-card balance-card">
+                    <div class="card-icon">₹</div>
+                    <div>
+                        <p>Total balance</p>
+                        <h2 id="balanceAmount">₹0.00</h2>
+                    </div>
+                </div>
+
+                <div class="summary-card income-card">
+                    <div class="card-icon">↗</div>
+                    <div>
+                        <p>Total income</p>
+                        <h2 id="incomeAmount">₹0.00</h2>
+                    </div>
+                </div>
+
+                <div class="summary-card expense-card">
+                    <div class="card-icon">↘</div>
+                    <div>
+                        <p>Total expenses</p>
+                        <h2 id="expenseAmount">₹0.00</h2>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Full-width add-transaction block -->
+            <section class="panel add-transaction-panel">
+                <div class="panel-heading" style="margin-bottom: 24px;">
+                    <div>
+                        <h2 class="add-transaction-title">Add transaction</h2>
+                    </div>
+                </div>
+
+                <form id="transactionForm" class="transaction-form wide">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionTitle">Title</label>
+                            <input type="text" id="transactionTitle" placeholder="e.g. Banana purchase" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transactionAmount">Amount</label>
+                            <input type="number" id="transactionAmount" min="0.01" step="0.01" placeholder="0.00"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transactionType">Type</label>
+                            <select id="transactionType" required>
+                                <option value="expense">Expense</option>
+                                <option value="income">Income</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transactionCategory">Category</label>
+                            <select id="transactionCategory" required>
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Bills">Bills</option>
+                                <option value="Health">Health</option>
+                                <option value="Education">Education</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Business">Business</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transactionDate">Date</label>
+                            <input type="date" id="transactionDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionTime">Time</label>
+                            <input type="time" id="transactionTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionNote">Note <span>(optional)</span></label>
+                        <textarea id="transactionNote" rows="2" placeholder="Short note"></textarea>
+                    </div>
+
+                    <div style="display:flex;gap:12px;">
+                        <button class="primary-button" type="submit">Add transaction</button>
+                        <button type="button" class="small-button" id="clearFormBtn">Clear</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Two-column area: Budget left, Recent right -->
+            <section class="two-column">
+                <div class="panel budget-panel small">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Budget summary</h2>
+                        </div>
+                        <button class="small-button" id="editBudgetBtn">Set budget</button>
+                    </div>
+
+                    <div class="budget-values">
+                        <span>Spent <strong id="budgetSpent">₹0.00</strong></span>
+                        <span>Budget <strong id="budgetLimit">₹0.00</strong></span>
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-bar" id="budgetProgress"></div>
+                    </div>
+
+                    <p class="budget-message" id="budgetMessage">Set a monthly budget to monitor your spending.</p>
+                </div>
+
+                <div class="panel recent-panel small">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Recent transactions</h2>
+                        </div>
+                        <a href="history.html" class="text-link">View all →</a>
+                    </div>
+
+                    <div id="recentTransactions" class="transaction-list"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- budget modal (same as before) -->
+    <div class="modal hidden" id="budgetModal">
+        <div class="modal-box">
+            <button class="close-button" id="closeBudgetBtn">×</button>
+            <p class="eyebrow">MONTHLY PLAN</p>
+            <h2>Set your budget</h2>
+            <p class="modal-description">Enter the maximum amount you plan to spend this month.</p>
+
+            <form id="budgetForm">
+                <div class="form-group">
+                    <label for="budgetInput">Monthly budget</label>
+                    <input type="number" id="budgetInput" min="0" step="0.01" placeholder="e.g. 25000" required>
+                </div>
+                <button class="primary-button" type="submit">Save budget</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL CONTAINER -->
+    <div id="authModalContainer"></div>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

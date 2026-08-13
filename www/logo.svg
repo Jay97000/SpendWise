@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 52" fill="none" class="spendwise-logo-svg">
+  <g class="logo-icon" transform="translate(2, 2)">
+    <!-- Rupee Top Bar 1 -->
+    <line x1="6" y1="9" x2="34" y2="9" stroke="currentColor" class="logo-navy" stroke-width="4.2" stroke-linecap="round"/>
+    <!-- Rupee Top Bar 2 -->
+    <line x1="6" y1="18" x2="34" y2="18" stroke="currentColor" class="logo-navy" stroke-width="4.2" stroke-linecap="round"/>
+    <!-- Rupee Stem and Loop -->
+    <path d="M 13,9 V 43 M 13,9 H 28 C 38,9 38,27 13,27 M 16,25 L 34,44" 
+          stroke="currentColor" class="logo-navy" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- Green Arrow -->
+    <path d="M 10,43 L 43,10 M 30,10 H 43 V 23" 
+          stroke="#00875A" class="logo-green" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <!-- Text Section -->
+  <text x="54" y="35" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" letter-spacing="-0.5">
+    <tspan fill="currentColor" class="logo-navy">Spend</tspan><tspan fill="#00875A" class="logo-green">Wise</tspan>
+  </text>
+</svg>

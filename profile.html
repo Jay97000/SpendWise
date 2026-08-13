@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Expense Tracker | My Profile</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00875a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SpendWise">
+  <link rel="apple-touch-icon" href="logo-light.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body data-page="profile">
+
+  <header class="topbar">
+    <a href="index.html" class="brand" title="SpendWise Dashboard">
+      <img src="logo-light.png" alt="SpendWise" class="brand-logo-img logo-light-img">
+      <img src="logo-dark.png" alt="SpendWise" class="brand-logo-img logo-dark-img">
+      <span class="brand-name"><span class="brand-spend">Spend</span><span class="brand-wise">Wise</span></span>
+    </a>
+
+    <div class="topbar-right">
+      <button id="themeToggle" class="theme-toggle-btn" type="button">🌙 Dark Mode</button>
+      <div id="topbarAuthArea"></div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a href="index.html" class="sidebar-link">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="history.html" class="sidebar-link">
+          <span class="icon">📜</span>
+          <span>History</span>
+        </a>
+        <a href="analytics.html" class="sidebar-link">
+          <span class="icon">📈</span>
+          <span>View Insights</span>
+        </a>
+        <a href="profile.html" class="sidebar-link active">
+          <span class="icon">👤</span>
+          <span>Profile</span>
+        </a>
+        <a href="monthly-reports.html" class="sidebar-link">
+          <span class="icon">📁</span>
+          <span>Monthly Reports</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content container">
+
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">USER ACCOUNT</p>
+          <h1>My Profile</h1>
+          <p>View and manage your personal info and financial settings.</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button type="button" class="secondary-button" onclick="openPdfModal()">💬 Share</button>
+          <button id="openEditProfileBtn" class="primary-button" style="width: auto; padding: 12px 24px;">✏️ Edit
+            Profile</button>
+        </div>
+      </section>
+
+      <!-- Profile Header Summary Card -->
+      <section class="panel profile-header-panel">
+        <div class="profile-avatar-large" id="profileInitialsAvatar">SW</div>
+        <div class="profile-header-info">
+          <h2 id="profileHeaderName">User Name</h2>
+          <p id="profileHeaderEmail" class="text-muted">user@example.com</p>
+          <span class="profile-badge" id="profileMemberBadge">Member</span>
+        </div>
+      </section>
+
+      <!-- Profile Details Cards Grid -->
+      <div class="profile-grid">
+
+        <!-- Personal Info Card -->
+        <div class="panel profile-card">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">ACCOUNT DETAILS</p>
+              <h2>Personal Information</h2>
+            </div>
+          </div>
+
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-label">Full Name</span>
+              <strong class="info-value" id="profileFullName">-</strong>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Email Address</span>
+              <strong class="info-value" id="profileEmail">-</strong>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Phone Number</span>
+              <strong class="info-value" id="profilePhone">-</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Preferences Card -->
+        <div class="panel profile-card">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">SETTINGS & GOALS</p>
+              <h2>Financial Preferences</h2>
+            </div>
+          </div>
+
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-label">Monthly Income</span>
+              <strong class="info-value green-text" id="profileIncome">₹0.00</strong>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Monthly Budget</span>
+              <strong class="info-value" id="profileBudget">₹0.00</strong>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Preferred Currency</span>
+              <strong class="info-value" id="profileCurrency">INR (₹)</strong>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Financial Goal</span>
+              <strong class="info-value" id="profileGoal">Save Money</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div class="modal hidden" id="editProfileModal">
+    <div class="modal-box">
+      <button class="close-button" id="closeEditProfileBtn">×</button>
+      <p class="eyebrow">UPDATE ACCOUNT</p>
+      <h2>Edit Profile</h2>
+      <p class="modal-description">Update your personal details and financial preferences.</p>
+
+      <form id="editProfileForm">
+        <div class="form-group">
+          <label for="editFullName">Full Name</label>
+          <input type="text" id="editFullName" required placeholder="Full Name">
+        </div>
+
+        <div class="form-group">
+          <label for="editPhone">Phone Number</label>
+          <input type="tel" id="editPhone" placeholder="+91 XXXXX XXXXX">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editIncome">Monthly Income</label>
+            <input type="number" id="editIncome" min="0" step="0.01" placeholder="50000">
+          </div>
+
+          <div class="form-group">
+            <label for="editBudget">Monthly Budget</label>
+            <input type="number" id="editBudget" min="0" step="0.01" placeholder="30000">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editCurrency">Preferred Currency</label>
+            <select id="editCurrency" required>
+              <option value="INR">INR (₹)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editGoal">Financial Goal</label>
+            <select id="editGoal" required>
+              <option value="Save Money">Save Money</option>
+              <option value="Control Spending">Control Spending</option>
+              <option value="Build Emergency Fund">Build Emergency Fund</option>
+              <option value="Pay Off Debt">Pay Off Debt</option>
+              <option value="Track Expenses">Track Expenses</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="primary-button" type="submit">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- AUTH MODAL CONTAINER (Included on all pages) -->
+  <div id="authModalContainer"></div>
+
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
