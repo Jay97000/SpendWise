@@ -1580,3 +1580,215 @@ if ("serviceWorker" in navigator) {
     });
   });
 }
+
+/* ==========================================================================
+   MOBILE NATIVE APP INTERACTIVE LOGIC (Onboarding, Quick Add, Offline)
+   ========================================================================== */
+
+// 1. Mobile Splash Screen Handler
+function initMobileSplashScreen() {
+  const splashEl = document.getElementById("mobileSplashScreen");
+  if (splashEl) {
+    setTimeout(() => {
+      splashEl.classList.add("hidden-splash");
+    }, 1200);
+  }
+}
+
+// 2. Onboarding Carousel Logic
+let currentOnboardingSlide = 0;
+function initOnboarding() {
+  const onboardingOverlay = document.getElementById("onboardingOverlay");
+  if (!onboardingOverlay) return;
+
+  const ONBOARDED_KEY = "spendwise_onboarded";
+  const hasOnboarded = localStorage.getItem(ONBOARDED_KEY);
+
+  if (!hasOnboarded) {
+    onboardingOverlay.classList.remove("hidden");
+  }
+
+  const slides = document.querySelectorAll(".onboarding-slide");
+  const dots = document.querySelectorAll(".onboarding-dot");
+  const nextBtn = document.getElementById("onboardingNextBtn");
+  const skipBtn = document.getElementById("onboardingSkipBtn");
+
+  function updateSlideView(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle("active-slide", i === index);
+    });
+    dots.forEach((d, i) => {
+      d.classList.toggle("active-dot", i === index);
+    });
+    if (nextBtn) {
+      nextBtn.textContent = index === slides.length - 1 ? "Get Started" : "Next";
+    }
+  }
+
+  function finishOnboarding() {
+    localStorage.setItem(ONBOARDED_KEY, "true");
+    onboardingOverlay.classList.add("hidden");
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (currentOnboardingSlide < slides.length - 1) {
+        currentOnboardingSlide++;
+        updateSlideView(currentOnboardingSlide);
+      } else {
+        finishOnboarding();
+      }
+    });
+  }
+
+  if (skipBtn) {
+    skipBtn.addEventListener("click", finishOnboarding);
+  }
+}
+
+// 3. Quick Add Expense/Income Mobile Bottom Sheet Manager
+function initMobileQuickAddSheet() {
+  const sheet = document.getElementById("mobileQuickAddSheet");
+  const openBtn = document.getElementById("openMobileAddBtn");
+  const closeBtn = document.getElementById("closeQuickAddSheet");
+  const tabExpense = document.getElementById("tabQuickExpense");
+  const tabIncome = document.getElementById("tabQuickIncome");
+  const typeInput = document.getElementById("quickType");
+  const quickForm = document.getElementById("mobileQuickForm");
+
+  if (!sheet) return;
+
+  if (openBtn) {
+    openBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      // Pre-fill today date and current time
+      const today = new Date();
+      const dateStr = today.toISOString().split("T")[0];
+      const timeStr = today.toTimeString().split(" ")[0].substring(0, 5);
+
+      const quickDateEl = document.getElementById("quickDate");
+      const quickTimeEl = document.getElementById("quickTime");
+      if (quickDateEl) quickDateEl.value = dateStr;
+      if (quickTimeEl) quickTimeEl.value = timeStr;
+
+      sheet.classList.add("show-sheet");
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      sheet.classList.remove("show-sheet");
+    });
+  }
+
+  // Close when clicking background outside drawer
+  sheet.addEventListener("click", (e) => {
+    if (e.target === sheet) {
+      sheet.classList.remove("show-sheet");
+    }
+  });
+
+  if (tabExpense && tabIncome && typeInput) {
+    tabExpense.addEventListener("click", () => {
+      tabExpense.className = "type-tab active-expense";
+      tabIncome.className = "type-tab";
+      typeInput.value = "expense";
+    });
+
+    tabIncome.addEventListener("click", () => {
+      tabIncome.className = "type-tab active-income";
+      tabExpense.className = "type-tab";
+      typeInput.value = "income";
+    });
+  }
+
+  if (quickForm) {
+    quickForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      try {
+        requireAuth();
+      } catch (err) {
+        sheet.classList.remove("show-sheet");
+        return;
+      }
+
+      const title = document.getElementById("quickTitle").value.trim();
+      const amount = parseFloat(document.getElementById("quickAmount").value);
+      const type = document.getElementById("quickType").value;
+      const category = document.getElementById("quickCategory").value;
+      const date = document.getElementById("quickDate").value;
+      const time = document.getElementById("quickTime").value;
+      const note = document.getElementById("quickNote").value.trim();
+
+      if (!title || isNaN(amount) || amount <= 0 || !date || !time) {
+        showToast("Please fill in all required fields properly.", "error");
+        return;
+      }
+
+      const newTx = {
+        id: Date.now(),
+        title,
+        amount,
+        type,
+        category,
+        date,
+        time,
+        note
+      };
+
+      transactions.push(newTx);
+      saveTransactions();
+      sheet.classList.remove("show-sheet");
+      quickForm.reset();
+
+      showToast(type === "income" ? "Income added successfully!" : "Expense added successfully!", "success");
+      
+      // Check budget thresholds if adding an expense
+      if (type === "expense") {
+        checkBudgetLimitNotification();
+      }
+
+      refreshAppView();
+    });
+  }
+}
+
+// 4. Budget Notification Alert Checker
+function checkBudgetLimitNotification() {
+  const totals = getTotals();
+  const currentBudget = getUserBudget();
+  if (currentBudget <= 0) return;
+
+  const percentage = (totals.expenses / currentBudget) * 100;
+  if (percentage >= 100) {
+    showToast(`⚠️ Alert: You have exceeded your monthly budget of ${formatCurrency(currentBudget)}!`, "error");
+  } else if (percentage >= 80) {
+    showToast(`⚠️ Warning: You have used ${percentage.toFixed(0)}% of your monthly budget!`, "error");
+  }
+}
+
+// 5. Offline Status Detector
+function initOfflineDetection() {
+  const banner = document.getElementById("offlineBanner");
+  if (!banner) return;
+
+  function updateOnlineStatus() {
+    if (navigator.onLine) {
+      banner.classList.remove("active");
+    } else {
+      banner.classList.add("active");
+    }
+  }
+
+  window.addEventListener("online", updateOnlineStatus);
+  window.addEventListener("offline", updateOnlineStatus);
+  updateOnlineStatus();
+}
+
+// Initialize Mobile Handlers on DOM Ready
+document.addEventListener("DOMContentLoaded", () => {
+  initMobileSplashScreen();
+  initOnboarding();
+  initMobileQuickAddSheet();
+  initOfflineDetection();
+});

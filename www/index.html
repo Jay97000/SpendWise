@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- hi hgth-->
 
 <head>
     <meta charset="UTF-8" />
@@ -220,6 +221,142 @@
 
     <!-- AUTH MODAL CONTAINER -->
     <div id="authModalContainer"></div>
+
+    <!-- OFFLINE INDICATOR BANNER -->
+    <div id="offlineBanner" class="offline-banner">⚠️ Offline Mode — Changes will sync locally</div>
+
+    <!-- MOBILE SPLASH SCREEN OVERLAY -->
+    <div id="mobileSplashScreen">
+        <div class="splash-logo-container">
+            <img src="logo.png" alt="SpendWise Logo" class="splash-logo-img">
+            <h1 class="splash-brand-title"><span class="brand-spend">Spend</span><span class="brand-wise">Wise</span></h1>
+            <p class="splash-tagline">Smart Personal Finance & Expense Manager</p>
+        </div>
+    </div>
+
+    <!-- MOBILE ONBOARDING OVERLAY -->
+    <div id="onboardingOverlay" class="hidden">
+        <div class="onboarding-header">
+            <button type="button" class="onboarding-skip-btn" id="onboardingSkipBtn">Skip</button>
+        </div>
+
+        <div class="onboarding-slides-container">
+            <div class="onboarding-slide active-slide" data-slide="0">
+                <div class="onboarding-icon">📊</div>
+                <h2>Track Expenses Effortlessly</h2>
+                <p>Log your daily spending and income in seconds with smart categorization and clean transaction history.</p>
+            </div>
+
+            <div class="onboarding-slide" data-slide="1">
+                <div class="onboarding-icon">🎯</div>
+                <h2>Set & Control Budgets</h2>
+                <p>Stay on top of your financial goals with real-time budget tracking and instant spending warnings.</p>
+            </div>
+
+            <div class="onboarding-slide" data-slide="2">
+                <div class="onboarding-icon">📈</div>
+                <h2>Visual Financial Insights</h2>
+                <p>Analyze your money flow with intuitive charts, monthly PDF statements, and personalized insights.</p>
+            </div>
+        </div>
+
+        <div class="onboarding-controls">
+            <div class="onboarding-dots">
+                <div class="onboarding-dot active-dot" data-dot="0"></div>
+                <div class="onboarding-dot" data-dot="1"></div>
+                <div class="onboarding-dot" data-dot="2"></div>
+            </div>
+            <button type="button" class="primary-button" id="onboardingNextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- QUICK ADD EXPENSE / INCOME MOBILE BOTTOM SHEET -->
+    <div id="mobileQuickAddSheet" class="mobile-bottom-sheet">
+        <div class="bottom-sheet-content">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <h2 id="sheetTitle">Quick Add Transaction</h2>
+                <button type="button" class="sheet-close-btn" id="closeQuickAddSheet">×</button>
+            </div>
+
+            <div class="type-tab-selector">
+                <button type="button" class="type-tab active-expense" id="tabQuickExpense">Expense</button>
+                <button type="button" class="type-tab" id="tabQuickIncome">Income</button>
+            </div>
+
+            <form id="mobileQuickForm">
+                <input type="hidden" id="quickType" value="expense">
+                
+                <div class="form-group">
+                    <label for="quickTitle">Title / Description</label>
+                    <input type="text" id="quickTitle" placeholder="e.g. Coffee, Grocery, Salary" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="quickAmount">Amount (₹)</label>
+                    <input type="number" id="quickAmount" min="0.01" step="0.01" placeholder="0.00" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="quickCategory">Category</label>
+                    <select id="quickCategory" required>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Health">Health</option>
+                        <option value="Education">Education</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Business">Business</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quickDate">Date</label>
+                        <input type="date" id="quickDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quickTime">Time</label>
+                        <input type="time" id="quickTime" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quickNote">Note (optional)</label>
+                    <textarea id="quickNote" rows="2" placeholder="Add details..."></textarea>
+                </div>
+
+                <button class="primary-button" type="submit" style="width: 100%; margin-top: 8px;">Save Transaction</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="mobile-nav-item active" id="navHome">
+            <span class="nav-icon">📊</span>
+            <span>Home</span>
+        </a>
+        <a href="history.html" class="mobile-nav-item" id="navTransactions">
+            <span class="nav-icon">📜</span>
+            <span>History</span>
+        </a>
+        <button type="button" class="mobile-nav-add-btn" id="openMobileAddBtn" title="Quick Add">
+            ＋
+        </button>
+        <a href="analytics.html" class="mobile-nav-item" id="navAnalytics">
+            <span class="nav-icon">📈</span>
+            <span>Analytics</span>
+        </a>
+        <a href="profile.html" class="mobile-nav-item" id="navProfile">
+            <span class="nav-icon">👤</span>
+            <span>Profile</span>
+        </a>
+    </nav>
 
     <script src="auth.js"></script>
     <script src="app.js"></script>
